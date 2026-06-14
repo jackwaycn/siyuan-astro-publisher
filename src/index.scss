@@ -1,0 +1,121 @@
+.astro-paper-publisher-dialog {
+    height: 100%;
+}
+
+.astro-paper-panel {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    overflow: auto;
+    padding: 18px;
+}
+
+.astro-paper-panel__state {
+    align-items: center;
+    color: var(--b3-theme-on-surface);
+    display: flex;
+    min-height: 220px;
+    justify-content: center;
+}
+
+.astro-paper-panel__warning,
+.astro-paper-panel__error,
+.astro-paper-panel__success {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    line-height: 1.6;
+}
+
+.astro-paper-panel__warning {
+    border-left: 3px solid var(--b3-theme-primary);
+}
+
+.astro-paper-panel__error {
+    border-left: 3px solid var(--b3-theme-error);
+    color: var(--b3-theme-error);
+}
+
+.astro-paper-panel__success {
+    border-left: 3px solid var(--b3-theme-primary);
+}
+
+.astro-paper-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.astro-paper-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.astro-paper-field > span {
+    color: var(--b3-theme-on-surface);
+    font-size: 12px;
+}
+
+.astro-paper-field .b3-text-field {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.astro-paper-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.astro-paper-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+}
+
+.astro-paper-checks label {
+    align-items: center;
+    display: inline-flex;
+    gap: 8px;
+}
+
+.astro-paper-summary {
+    background: var(--b3-theme-surface-lighter);
+    border: 1px solid var(--b3-border-color);
+    border-radius: 6px;
+    color: var(--b3-theme-on-surface);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    word-break: break-all;
+}
+
+.astro-paper-panel__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+@media (max-width: 640px) {
+    .astro-paper-panel {
+        padding: 14px;
+    }
+
+    .astro-paper-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .astro-paper-panel__actions {
+        flex-direction: column;
+    }
+
+    .astro-paper-panel__actions .b3-button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "siyuan-astro-paper-publisher",
+  "author": "frostime",
+  "url": "https://github.com/frostime/siyuan-astro-paper-publisher",
+  "version": "0.1.0",
+  "minAppVersion": "3.2.1",
+  "disabledInPublish": true,
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker"
+  ],
+  "frontends": [
+    "desktop",
+    "mobile",
+    "browser-desktop",
+    "browser-mobile",
+    "desktop-window"
+  ],
+  "displayName": {
+    "default": "AstroPaper GitHub Publisher",
+    "zh_CN": "AstroPaper GitHub 发布器"
+  },
+  "description": {
+    "default": "Publish the current SiYuan document to an AstroPaper blog repository on GitHub.",
+    "zh_CN": "将当前思源文档发布到 GitHub 上的 AstroPaper 博客仓库。"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
+    "custom": []
+  },
+  "keywords": [
+    "astro",
+    "astro-paper",
+    "github",
+    "blog",
+    "publish",
+    "博客",
+    "发布"
+  ]
+}
