@@ -296,18 +296,33 @@ function cleanInlineText(value: string) {
 
 function findAssetReferences(markdown: string): AssetReference[] {
     const refs = new Map<string, AssetReference>();
-    const pattern = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)|<img[^>]+src=["']([^"']+)["'][^>]*>/g;
-    let match: RegExpExecArray | null;
-    while ((match = pattern.exec(markdown)) !== null) {
-        const original = match[1] || match[2];
-        if (!original || isRemoteUrl(original) || refs.has(original)) continue;
-        const sourcePath = normalizeAssetPath(decodeURIComponent(original));
-        if (!sourcePath) continue;
+    const addReference = (original: string, requireAssetExtension = false) => {
+        if (!original || isRemoteUrl(original) || refs.has(original)) return;
+        if (requireAssetExtension && !isLocalAssetLink(original)) return;
+        const sourcePath = normalizeAssetPath(safeDecodeURIComponent(original));
+        if (!sourcePath) return;
         refs.set(original, {
             original,
             sourcePath,
             fileName: uniqueFileName(sourcePath, refs.size),
         });
+    };
+
+    const markdownPattern = /(!?)\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+    let match: RegExpExecArray | null;
+    while ((match = markdownPattern.exec(markdown)) !== null) {
+        addReference(match[2], match[1] !== "!");
+    }
+
+    const htmlMediaPattern = /<(img|video|audio|source|track)\b[^>]*>/gi;
+    const htmlAssetAttrPattern = /\b(?:src|poster)=["']([^"']+)["']/gi;
+    while ((match = htmlMediaPattern.exec(markdown)) !== null) {
+        const tag = match[0];
+        let attrMatch: RegExpExecArray | null;
+        htmlAssetAttrPattern.lastIndex = 0;
+        while ((attrMatch = htmlAssetAttrPattern.exec(tag)) !== null) {
+            addReference(attrMatch[1]);
+        }
     }
     return Array.from(refs.values());
 }
@@ -319,6 +334,20 @@ function normalizeAssetPath(path: string) {
     if (clean.startsWith("/assets/")) return clean.slice(1);
     if (clean.startsWith("data/")) return clean;
     return clean;
+}
+
+function isLocalAssetLink(value: string) {
+    const clean = normalizeAssetPath(safeDecodeURIComponent(value)).toLowerCase();
+    if (clean.startsWith("assets/") || clean.startsWith("data/assets/")) return true;
+    return /\.(avif|bmp|gif|jpe?g|png|svg|webp|ico|mp4|m4v|mov|webm|ogv|avi|mkv|wmv|flv|3gp|mp3|m4a|aac|wav|ogg|oga|flac|opus)$/i.test(clean);
+}
+
+function safeDecodeURIComponent(value: string) {
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
 }
 
 function replaceAssetUrls(markdown: string, assetMap: Map<string, string>) {

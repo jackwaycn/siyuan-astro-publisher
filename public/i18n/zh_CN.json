@@ -19,7 +19,7 @@
   "fieldOverwrite": "覆盖同名文件",
   "fieldCommitMessage": "提交信息",
   "targetPath": "目标路径",
-  "assetCount": "图片资源",
+  "assetCount": "本地资源",
   "reloadDraft": "重新读取",
   "publishing": "发布中...",
   "publish": "发布",
@@ -35,13 +35,13 @@
   "settingsContentDirTitle": "文章目录",
   "settingsContentDirDesc": "AstroPaper 默认是 src/content/posts。",
   "settingsAssetDirTitle": "资源目录",
-  "settingsAssetDirDesc": "图片上传路径模板。默认 src/content/posts/assets/{slug}；去掉 {slug} 可不按文章分目录。",
+  "settingsAssetDirDesc": "资源上传路径模板。默认 src/content/posts/assets/{slug}；去掉 {slug} 可不按文章分目录。",
   "settingsAssetUrlPrefixTitle": "资源引用路径前缀",
-  "settingsAssetUrlPrefixDesc": "写入 Markdown 的图片路径模板。默认 ./assets/{slug}；去掉 {slug} 可直接引用同级 assets 目录。",
+  "settingsAssetUrlPrefixDesc": "写入 Markdown 的资源路径模板。默认 ./assets/{slug}；去掉 {slug} 可直接引用同级 assets 目录。",
   "settingsAuthorTitle": "默认作者",
   "settingsAuthorDesc": "留空时由 AstroPaper 站点配置决定。",
   "settingsDefaultTagsTitle": "默认标签",
   "settingsDefaultTagsDesc": "用逗号分隔；AstroPaper 至少需要一个标签，默认 others。",
-  "settingsIncludeAssetsTitle": "上传本地图片",
-  "settingsIncludeAssetsDesc": "发布时尝试上传 Markdown 中引用的思源本地资源，并替换为 Astro 可访问路径。"
+  "settingsIncludeAssetsTitle": "上传本地资源",
+  "settingsIncludeAssetsDesc": "发布时尝试上传 Markdown 中引用的思源本地图片、视频和音频资源，并替换为 Astro 可访问路径。"
 }

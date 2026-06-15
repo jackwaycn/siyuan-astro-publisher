@@ -4,7 +4,7 @@
 
 A SiYuan plugin for publishing the current document to an AstroPaper blog repository on GitHub.
 
-The plugin exports the current document as Markdown, creates AstroPaper-compatible frontmatter, and commits the file through the GitHub Contents API. It defaults to AstroPaper's post directory `src/content/posts`; local images are uploaded to `src/content/posts/assets/{slug}/` and referenced as `./assets/{slug}/...` by default.
+The plugin exports the current document as Markdown, creates AstroPaper-compatible frontmatter, and commits the file through the GitHub Contents API. It defaults to AstroPaper's post directory `src/content/posts`; local images, videos, and audio files are uploaded to `src/content/posts/assets/{slug}/` and referenced as `./assets/{slug}/...` by default.
 
 ## Features
 
@@ -13,7 +13,7 @@ The plugin exports the current document as Markdown, creates AstroPaper-compatib
 - Add `modDatetime` automatically when overwriting an existing post.
 - Edit title, slug, description, tags, author, published time, and commit message before publishing.
 - Overwrite existing Markdown files when needed.
-- Try to upload local image assets referenced by Markdown and rewrite links to Astro-accessible paths.
+- Try to upload local image, video, and audio assets referenced by Markdown and rewrite links to Astro-accessible paths.
 - Use East Asia time by default and write `timezone: "Asia/Shanghai"`.
 
 ## Settings
@@ -25,7 +25,7 @@ Open the plugin settings and fill in:
 - Branch: the target branch, usually `main`.
 - GitHub token: a fine-grained personal access token with repository `Contents: Read and write` permission.
 - Post directory: AstroPaper defaults to `src/content/posts`.
-- Asset directory: defaults to `src/content/posts/assets/{slug}`; this is where files are uploaded in the repository.
+- Asset directory: defaults to `src/content/posts/assets/{slug}`; this is where local assets are uploaded in the repository.
 - Asset URL prefix: defaults to `./assets/{slug}`; this is what gets written into Markdown.
 
 Asset directory and asset URL prefix support template placeholders:
@@ -40,7 +40,7 @@ Asset directory: src/content/posts/assets
 Asset URL prefix: ./assets
 ```
 
-Images will then be uploaded to `src/content/posts/assets/image.png` and referenced as `./assets/image.png`.
+Assets will then be uploaded to `src/content/posts/assets/image.png` and referenced as `./assets/image.png`.
 - Default author: optional; leave empty to let AstroPaper use the site author.
 - Default tags: defaults to `others`; AstroPaper needs at least one tag.
 

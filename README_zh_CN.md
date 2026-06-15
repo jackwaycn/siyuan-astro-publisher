@@ -4,7 +4,7 @@
 
 这是一个思源笔记插件，用来把当前打开的文档发布到 GitHub 上的 AstroPaper 博客仓库。
 
-插件会导出当前文档 Markdown，生成 AstroPaper 兼容的 frontmatter，并通过 GitHub Contents API 提交到仓库。默认适配 AstroPaper 的文章目录 `src/content/posts`，本地图片会尝试从思源资源路径读取后上传到 `src/content/posts/assets/{slug}/`，Markdown 中默认写入相对路径 `./assets/{slug}/...`。
+插件会导出当前文档 Markdown，生成 AstroPaper 兼容的 frontmatter，并通过 GitHub Contents API 提交到仓库。默认适配 AstroPaper 的文章目录 `src/content/posts`，本地图片、视频和音频会尝试从思源资源路径读取后上传到 `src/content/posts/assets/{slug}/`，Markdown 中默认写入相对路径 `./assets/{slug}/...`。
 
 ## 功能
 
@@ -25,8 +25,8 @@
 - Branch：提交分支，通常是 `main`。
 - GitHub Token：需要仓库 `Contents: Read and write` 权限的 fine-grained personal access token。
 - 文章目录：AstroPaper 默认是 `src/content/posts`。
-- 资源目录：默认 `src/content/posts/assets/{slug}`，表示图片上传到仓库中的位置。
-- 资源引用路径前缀：默认 `./assets/{slug}`，表示 Markdown 中图片链接怎么写，不是思源本地资源路径。
+- 资源目录：默认 `src/content/posts/assets/{slug}`，表示本地资源上传到仓库中的位置。
+- 资源引用路径前缀：默认 `./assets/{slug}`，表示 Markdown 中资源链接怎么写，不是思源本地资源路径。
 
 资源目录和资源引用路径都支持模板占位符：
 
@@ -40,7 +40,7 @@
 资源引用路径前缀：./assets
 ```
 
-这样图片会上传到 `src/content/posts/assets/image.png`，文章中引用为 `./assets/image.png`。
+这样资源会上传到 `src/content/posts/assets/image.png`，文章中引用为 `./assets/image.png`。
 - 默认作者：可留空，让 AstroPaper 使用站点作者。
 - 默认标签：默认 `others`，AstroPaper 至少需要一个标签。
 

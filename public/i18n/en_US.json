@@ -19,7 +19,7 @@
   "fieldOverwrite": "Overwrite existing file",
   "fieldCommitMessage": "Commit message",
   "targetPath": "Target path",
-  "assetCount": "Image assets",
+  "assetCount": "Local assets",
   "reloadDraft": "Reload",
   "publishing": "Publishing...",
   "publish": "Publish",
@@ -35,13 +35,13 @@
   "settingsContentDirTitle": "Post directory",
   "settingsContentDirDesc": "AstroPaper uses src/content/posts by default.",
   "settingsAssetDirTitle": "Asset directory",
-  "settingsAssetDirDesc": "Image upload path template. Default: src/content/posts/assets/{slug}; remove {slug} to avoid per-post folders.",
+  "settingsAssetDirDesc": "Asset upload path template. Default: src/content/posts/assets/{slug}; remove {slug} to avoid per-post folders.",
   "settingsAssetUrlPrefixTitle": "Asset URL prefix",
-  "settingsAssetUrlPrefixDesc": "Image path template written to Markdown. Default: ./assets/{slug}; remove {slug} to reference the shared assets directory.",
+  "settingsAssetUrlPrefixDesc": "Asset path template written to Markdown. Default: ./assets/{slug}; remove {slug} to reference the shared assets directory.",
   "settingsAuthorTitle": "Default author",
   "settingsAuthorDesc": "Leave empty to let AstroPaper use the site author.",
   "settingsDefaultTagsTitle": "Default tags",
   "settingsDefaultTagsDesc": "Comma-separated. AstroPaper requires at least one tag; default is others.",
-  "settingsIncludeAssetsTitle": "Upload local images",
-  "settingsIncludeAssetsDesc": "Try to upload local SiYuan assets referenced by Markdown and rewrite them to Astro-accessible paths."
+  "settingsIncludeAssetsTitle": "Upload local assets",
+  "settingsIncludeAssetsDesc": "Try to upload local SiYuan image, video, and audio assets referenced by Markdown and rewrite them to Astro-accessible paths."
 }
