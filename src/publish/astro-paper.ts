@@ -74,9 +74,10 @@ export class AstroPaperGithubPublisher {
             getBlockAttrs(docId).catch(() => ({})),
         ]);
 
-        const rawTitle = attrs["custom-astro-title"] || doc?.content || exported?.hPath?.split("/").pop() || "Untitled";
+        const docTitle = cleanInlineText(doc?.content || exported?.hPath?.split("/").pop() || "");
+        const rawTitle = attrs["custom-astro-title"] || docTitle || "Untitled";
         const title = cleanInlineText(rawTitle);
-        const markdown = normalizeMarkdown(exported?.content ?? "");
+        const markdown = removeLeadingDocumentTitle(normalizeMarkdown(exported?.content ?? ""), docTitle);
         const description = attrs["custom-astro-description"] || createDescription(markdown, title);
         const settings = this.getSettings();
         const tags = splitTags(attrs["custom-astro-tags"] || settings.defaultTags);
@@ -272,6 +273,24 @@ function normalizeMarkdown(markdown: string) {
         .replace(/\n\{:\s+[^}]*id="[^"]+"[^}]*\}/g, "")
         .replace(/\n{3,}/g, "\n\n")
         .trim();
+}
+
+function removeLeadingDocumentTitle(markdown: string, documentTitle: string) {
+    const title = cleanInlineText(documentTitle);
+    if (!title || !markdown.trim()) return markdown.trim();
+
+    const lines = markdown.replace(/^\uFEFF/, "").split(/\r?\n/);
+    const firstLine = lines[0]?.trim() ?? "";
+    const atxHeading = firstLine.match(/^#(?!#)\s+(.+?)\s*#*\s*$/);
+    if (atxHeading && cleanInlineText(atxHeading[1]) === title) {
+        return lines.slice(1).join("\n").replace(/^\n+/, "").trim();
+    }
+
+    if (lines.length > 1 && cleanInlineText(firstLine) === title && /^=+\s*$/.test(lines[1].trim())) {
+        return lines.slice(2).join("\n").replace(/^\n+/, "").trim();
+    }
+
+    return markdown.trim();
 }
 
 function createDescription(markdown: string, fallback: string) {
