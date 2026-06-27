@@ -24,6 +24,8 @@
   "publishing": "发布中...",
   "publish": "发布",
   "publishSuccess": "发布成功",
+  "publishedHistory": "已发布过",
+  "openPublishedFile": "打开上次发布文件",
   "settingsOwnerTitle": "GitHub Owner",
   "settingsOwnerDesc": "仓库所属用户或组织，例如 octocat。",
   "settingsRepoTitle": "GitHub Repo",

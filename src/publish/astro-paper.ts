@@ -1,4 +1,4 @@
-import { exportMdContent, getBlockAttrs, getBlockByID, getFileBlob } from "@/api";
+import { exportMdContent, getBlockAttrs, getBlockByID, getFileBlob, setBlockAttrs } from "@/api";
 
 export interface BlogPublishSettings {
     owner: string;
@@ -26,6 +26,10 @@ export interface PublishDraft {
     featured: boolean;
     markdown: string;
     assetRefs: AssetReference[];
+    published: boolean;
+    lastPublishedAt: string;
+    lastUrl: string;
+    lastMarkdownPath: string;
 }
 
 export interface PublishInput extends PublishDraft {
@@ -38,6 +42,7 @@ export interface PublishResult {
     markdownPath: string;
     url: string;
     uploadedAssets: string[];
+    lastPublishedAt: string;
 }
 
 export interface AssetReference {
@@ -96,6 +101,10 @@ export class AstroPaperGithubPublisher {
             featured: attrs["custom-astro-featured"] === "true",
             markdown,
             assetRefs: findAssetReferences(markdown),
+            published: attrs["custom-astro-published"] === "true" || Boolean(attrs["custom-astro-last-url"]),
+            lastPublishedAt: attrs["custom-astro-last-published-at"] || "",
+            lastUrl: attrs["custom-astro-last-url"] || "",
+            lastMarkdownPath: attrs["custom-astro-last-markdown-path"] || "",
         };
     }
 
@@ -127,10 +136,19 @@ export class AstroPaperGithubPublisher {
             existing: existingMarkdown,
         });
 
+        const uploadedUrl = uploadedMarkdown.html_url ?? buildGithubFileUrl(settings, markdownPath);
+        const lastPublishedAt = formatEast8DateTime();
+        await savePublishHistory(input, {
+            markdownPath,
+            url: uploadedUrl,
+            lastPublishedAt,
+        });
+
         return {
             markdownPath,
-            url: uploadedMarkdown.html_url ?? buildGithubFileUrl(settings, markdownPath),
+            url: uploadedUrl,
             uploadedAssets: Array.from(assetMap.values()),
+            lastPublishedAt,
         };
     }
 
@@ -265,6 +283,28 @@ function validateInput(input: PublishInput) {
     if (!input.description.trim()) throw new Error("Description is required by AstroPaper");
     if (!input.slug.trim()) throw new Error("Slug is required");
     if (input.tags.length === 0) throw new Error("At least one tag is required");
+}
+
+async function savePublishHistory(input: PublishInput, result: Pick<PublishResult, "markdownPath" | "url" | "lastPublishedAt">) {
+    try {
+        await setBlockAttrs(input.docId, {
+            "custom-astro-published": "true",
+            "custom-astro-title": input.title,
+            "custom-astro-description": input.description,
+            "custom-astro-tags": input.tags.join(", "),
+            "custom-astro-slug": input.slug,
+            "custom-astro-author": input.author,
+            "custom-astro-pub-datetime": input.pubDatetime,
+            "custom-astro-timezone": input.timezone || "Asia/Shanghai",
+            "custom-astro-draft": String(input.draft),
+            "custom-astro-featured": String(input.featured),
+            "custom-astro-last-published-at": result.lastPublishedAt,
+            "custom-astro-last-url": result.url,
+            "custom-astro-last-markdown-path": result.markdownPath,
+        });
+    } catch (error) {
+        console.warn("Failed to save AstroPaper publish history:", error);
+    }
 }
 
 function normalizeMarkdown(markdown: string) {

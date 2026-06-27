@@ -24,6 +24,8 @@
   "publishing": "Publishing...",
   "publish": "Publish",
   "publishSuccess": "Published",
+  "publishedHistory": "Previously published",
+  "openPublishedFile": "Open last published file",
   "settingsOwnerTitle": "GitHub owner",
   "settingsOwnerDesc": "The user or organization that owns the repository, for example octocat.",
   "settingsRepoTitle": "GitHub repo",

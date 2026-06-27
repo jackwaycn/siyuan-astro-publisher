@@ -22,7 +22,8 @@
 
 .astro-paper-panel__warning,
 .astro-paper-panel__error,
-.astro-paper-panel__success {
+.astro-paper-panel__success,
+.astro-paper-panel__history {
     align-items: center;
     display: flex;
     gap: 10px;
@@ -41,6 +42,10 @@
 
 .astro-paper-panel__success {
     border-left: 3px solid var(--b3-theme-primary);
+}
+
+.astro-paper-panel__history {
+    border-left: 3px solid var(--b3-theme-secondary);
 }
 
 .astro-paper-form {

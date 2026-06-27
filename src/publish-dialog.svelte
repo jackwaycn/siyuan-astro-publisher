@@ -60,6 +60,13 @@
                 overwrite,
             });
             resultUrl = result.url;
+            draft = {
+                ...draft,
+                published: true,
+                lastPublishedAt: result.lastPublishedAt,
+                lastUrl: result.url,
+                lastMarkdownPath: result.markdownPath,
+            };
             onPublished(result.url);
         } catch (err) {
             error = getErrorMessage(err);
@@ -87,6 +94,15 @@
             <div class="b3-label astro-paper-panel__warning">
                 {i18n.settingsMissing}
                 <button class="b3-button b3-button--outline" on:click={onOpenSettings}>{i18n.openPublisherSettings}</button>
+            </div>
+        {/if}
+
+        {#if draft.published}
+            <div class="b3-label astro-paper-panel__history">
+                <span>{i18n.publishedHistory}{draft.lastPublishedAt ? `: ${draft.lastPublishedAt}` : ""}</span>
+                {#if draft.lastUrl}
+                    <a href={draft.lastUrl} target="_blank" rel="noreferrer">{i18n.openPublishedFile}</a>
+                {/if}
             </div>
         {/if}
 
