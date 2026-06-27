@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { resolve } from "path"
 import { defineConfig, loadEnv } from "vite"
 import { viteStaticCopy } from "vite-plugin-static-copy"
@@ -13,10 +14,13 @@ const isSrcmap = env.VITE_SOURCEMAP === 'inline';
 const isDev = env.NODE_ENV === 'development';
 
 const outputDir = isDev ? "dev" : "dist";
+const pluginMeta = JSON.parse(readFileSync(resolve(__dirname, "plugin.json"), "utf-8"));
+const packageFileName = `${pluginMeta.name}-${pluginMeta.version}.zip`;
 
 console.log("isDev=>", isDev);
 console.log("isSrcmap=>", isSrcmap);
 console.log("outputDir=>", outputDir);
+console.log("packageFileName=>", packageFileName);
 
 export default defineConfig({
     resolve: {
@@ -86,7 +90,7 @@ export default defineConfig({
                     zipPack({
                         inDir: './dist',
                         outDir: './',
-                        outFileName: 'package.zip'
+                        outFileName: packageFileName
                     })
                 ])
             ],
