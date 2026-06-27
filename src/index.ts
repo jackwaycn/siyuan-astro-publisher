@@ -10,6 +10,10 @@ const STORAGE_NAME = "astro-paper-publisher-settings";
 export default class AstroPaperPublisherPlugin extends Plugin {
     private isMobile = false;
     private settings: SettingUtils;
+    private activeDocId = "";
+    private readonly handleSwitchProtyle = (event: CustomEvent<{ protyle: any }>) => {
+        this.activeDocId = getRootIdFromProtyle(event.detail?.protyle) || this.activeDocId;
+    };
 
     async onload() {
         this.isMobile = ["mobile", "browser-mobile"].includes(getFrontend());
@@ -40,6 +44,7 @@ export default class AstroPaperPublisherPlugin extends Plugin {
             langKey: "publishCurrentDoc",
             hotkey: "⌥⌘P",
             callback: () => this.openPublishDialog(),
+            editorCallback: (protyle) => this.openPublishDialog(getRootIdFromProtyle(protyle)),
         });
 
         this.addCommand({
@@ -47,6 +52,8 @@ export default class AstroPaperPublisherPlugin extends Plugin {
             hotkey: "",
             callback: () => this.openPublisherSettings(),
         });
+
+        this.eventBus.on("switch-protyle", this.handleSwitchProtyle);
     }
 
     onLayoutReady() {
@@ -69,6 +76,7 @@ export default class AstroPaperPublisherPlugin extends Plugin {
     }
 
     async onunload() {
+        this.eventBus.off("switch-protyle", this.handleSwitchProtyle);
         console.log("AstroPaper GitHub Publisher unloaded");
     }
 
@@ -183,11 +191,12 @@ export default class AstroPaperPublisherPlugin extends Plugin {
         });
     }
 
-    private openPublishDialog() {
-        const editor = this.getEditor();
-        if (!editor) return;
+    private openPublishDialog(docId = this.getCurrentDocId()) {
+        if (!docId) {
+            showMessage(this.i18n.openDocFirst);
+            return;
+        }
 
-        const docId = editor.protyle.block.rootID;
         const publisher = new AstroPaperGithubPublisher(() => normalizeSettings(this.settings.dump()));
 
         let component: PublishDialog;
@@ -219,13 +228,15 @@ export default class AstroPaperPublisherPlugin extends Plugin {
         this.setting.open(this.name);
     }
 
-    private getEditor(): any | undefined {
+    private getCurrentDocId(): string {
+        const activeDocId = this.activeDocId || getVisibleProtyleDocId();
+        if (activeDocId) return activeDocId;
+
         const editors = getAllEditor();
         if (editors.length === 0) {
-            showMessage(this.i18n.openDocFirst);
-            return undefined;
+            return "";
         }
-        return editors[0];
+        return getRootIdFromProtyle(editors[editors.length - 1]?.protyle);
     }
 
     uninstall() {
@@ -254,4 +265,15 @@ function normalizeSettings(data: Partial<BlogPublishSettings> = {}): BlogPublish
 
 function trimSlashes(value: string) {
     return value.trim().replace(/^\/+|\/+$/g, "");
+}
+
+function getRootIdFromProtyle(protyle: any): string {
+    return protyle?.block?.rootID || "";
+}
+
+function getVisibleProtyleDocId(): string {
+    const protyles = Array.from(document.querySelectorAll<HTMLElement>(".protyle"));
+    const visibleProtyle = protyles.find((element) => element.offsetParent !== null);
+    const editor = getAllEditor().find((item) => item.protyle?.element === visibleProtyle);
+    return getRootIdFromProtyle(editor?.protyle);
 }
